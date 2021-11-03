@@ -1,0 +1,29 @@
+version: "3.7"
+services:
+  database:
+    image: postgres:14-bullseye
+    ports:
+      - 5432:5432
+    volumes:
+      - data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=django
+      - POSTGRES_USER=django
+      - POSTGRES_PASSWORD=django
+
+  backend:
+    build: ./lib_catalog
+    ports:
+      - 8000:8000
+    depends_on:
+      - database
+
+  frontend:
+    build: ./frontend
+    ports:
+      - 3000:3000
+    depends_on:
+      - backend
+
+volumes:
+  data:
